@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
       properties: {
         Name: {
           type: 'title',
-          title: [{ type: 'text', text: { content: data.name } }],
+          title: [{ type: 'text', text: { content: changeCase(data.name, 'sentence') } }],
+        },
+        Status: {
+          type: 'status',
+          status: { name: 'Filled' },
         },
         DOB: {
           type: 'date',
@@ -30,7 +34,7 @@ export default defineEventHandler(async (event) => {
         },
         Gender: {
           type: 'select',
-          select: { name: data.gender },
+          select: { name: changeCase(data.gender, 'sentence') },
         },
 
         Phone: {

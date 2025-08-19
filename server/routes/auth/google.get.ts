@@ -19,17 +19,16 @@ async function findOrCreateNotionUser(authUser: { sub: string; name: string; pic
   })
 
   if (query.results.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = query.results[0] as any
+    const data = query.results[0] as unknown as NotionUser
 
     return {
       id: data.id,
       name: notionTextStringify(data.properties.Name.title),
-      avatar: data.cover?.external.url || authUser.picture,
+      avatar: data.cover?.type === 'external' ? data.cover?.external.url : authUser.picture,
       email: data.properties.Email.email || '',
       createdAt: data.created_time || new Date().toISOString(),
       updatedAt: data.last_edited_time || new Date().toISOString(),
-      isCreatedNow: false,
+      isCreatedNow: data.properties.Status.status.name === 'Unfilled',
     }
   }
 

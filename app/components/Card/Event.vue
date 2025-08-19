@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, formatDistanceToNow, isBefore, startOfDay } from 'date-fns'
 
 const props = defineProps<{
   name: string
@@ -17,15 +17,22 @@ const dateObj = computed(() => parseISO(props.datetime))
 const date = computed(() => format(dateObj.value, 'MMMM d, yyyy')) // Aug 24, 2025
 const day = computed(() => format(dateObj.value, 'EEEE')) // Sunday
 const time = computed(() => format(dateObj.value, 'hh:mm a')) // 08:00 PM
+const relativeTime = computed(() => formatDistanceToNow(dateObj.value, { addSuffix: true }))
+const isActive = computed(() => {
+  const now = new Date()
+  // active only if current time is strictly before the event day
+  return isBefore(now, startOfDay(dateObj.value))
+})
 </script>
 
 <template>
   <div class="relative space-y-4">
     <!-- Date -->
-    <div class="flex items-center text-white">
+    <div class="flex items-center justify-between text-white">
       <span class="font-medium">
         {{ date }} <span class="ml-1 opacity-60">{{ day }}</span>
       </span>
+      <span class="">{{ relativeTime }}</span>
     </div>
     <!-- Card -->
     <div
@@ -41,7 +48,7 @@ const time = computed(() => format(dateObj.value, 'hh:mm a')) // 08:00 PM
       <!-- </div> -->
       <p class="font-semibold col-start-1 row-start-4 pt-1 text-base">₹{{ price }}</p>
       <!-- Actions -->
-      <div class="col-span-full col-start-1 row-start-5 flex gap-2 pt-2">
+      <div v-show="isActive" class="col-span-full col-start-1 row-start-5 flex gap-2 pt-2">
         <NuxtLink :to="paymentUrl" external class="font-medium text-gray-900 flex h-fit items-center gap-1 rounded-full bg-white px-2 py-1.5 pr-3 text-sm text-black shadow">
           <NuxtIcon name="local:ticket" class="text-[16px]" /> Purchase
         </NuxtLink>
