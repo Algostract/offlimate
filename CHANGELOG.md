@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.1.1
+
+[compare changes](https://github.com/shba007/offlimate/compare/v0.1.0...v0.1.1)
+
+### 🏡 Chore
+
+- Images updated, pwa config updated ([5a20a0c](https://github.com/shba007/offlimate/commit/5a20a0c))
+- Resized hero-image ([42a9afb](https://github.com/shba007/offlimate/commit/42a9afb))
+
+### ❤️ Contributors
+
+- Shba007 ([@shba007](https://github.com/shba007))
+
 ## v0.1.0
 
 ### 🚀 Enhancements
