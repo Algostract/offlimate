@@ -129,7 +129,6 @@ export default defineNuxtConfig({
     disallow: ['/_nuxt/'],
   },
   pwa: {
-    strategies: 'generateSW',
     injectRegister: 'auto',
     registerType: 'autoUpdate',
     includeManifestIcons: false,
@@ -272,9 +271,33 @@ export default defineNuxtConfig({
         },
       ],
     },
-    injectManifest: {
-      globPatterns: ['**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}'],
-      globIgnores: ['manifest**.webmanifest'],
+    workbox: {
+      globPatterns: ['**/*.{html,css,js,jpg,jpeg,png,svg,webp,ico,mp3,wav,ogg,mp4,webm,mov,m4a,aac}'],
+      runtimeCaching: [
+        {
+          urlPattern: /\.(?:html|js|css)$/,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'dynamic-assets',
+          },
+        },
+        {
+          urlPattern: /\.(?:png|jpg|jpeg|svg|webp|ico|mp3|wav|ogg|mp4|webm|mov|m4a|aac)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'static-assets',
+            expiration: { maxEntries: 100, maxAgeSeconds: 7 * 24 * 60 * 60 },
+          },
+        },
+      ],
+      navigateFallback: '/',
+      cleanupOutdatedCaches: true,
+      importScripts: ['/sw-push.js'],
+      maximumFileSizeToCacheInBytes: 3000000,
+    },
+    client: {
+      installPrompt: true,
+      periodicSyncForUpdates: 3600,
     },
     devOptions: {
       enabled: false,
