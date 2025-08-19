@@ -1,20 +1,23 @@
-FROM node:lts-alpine AS builder
+FROM oven/bun:1-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json bun.lock ./
+COPY nuxt.config.ts ./
 
-RUN npm ci
+ENV NITRO_PRESET=bun
+ENV NUXT_PUBLIC_SITE_URL=$SITE_URL
+
+RUN bun install --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV=production
+RUN bun run build
 
-RUN npm run build
-
-FROM node:lts-alpine AS runner
+FROM oven/bun:1-alpine AS runner
 
 ARG VERSION
+ARG BUILD_TIME
 
 WORKDIR /app
 
@@ -22,7 +25,8 @@ COPY --from=builder /app/.output ./.output
 
 ENV NODE_ENV=production
 ENV NUXT_APP_VERSION=$VERSION
+ENV NUXT_APP_BUILD_TIME=$BUILD_TIME
 
 EXPOSE 3000
 
-ENTRYPOINT ["node", ".output/server/index.mjs"]
+ENTRYPOINT ["bun", ".output/server/index.mjs"]

@@ -1,14 +1,17 @@
 # Nuxt dev/build outputs
-.output
+.cache
+.data
 .nuxt
 .nitro
-.cache
+.output
 dist
 
 # Node dependencies
 node_modules
+
+# Package Manager
 package.json
-package-lock.json
+bun.lock
 
 # Logs
 logs
@@ -19,6 +22,9 @@ logs
 .fleet
 .idea
 
-# Local env files
-.env
-.env.*
+# Env files
+.env*
+!.env.example
+
+# Tauri files
+src-tauri

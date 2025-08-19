@@ -1,9 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['components/**/*.{vue,js,ts}', 'layouts/**/*.vue', 'pages/**/*.vue', 'App.{js,ts,vue}', 'app.{js,ts,vue}', 'Error.{js,ts,vue}', 'error.{js,ts,vue}', 'content/**/*.md'],
+import type { Config } from 'tailwindcss'
+
+export default <Partial<Config>>{
   darkMode: 'class',
   theme: {
     fontSize: {
+      '3xs': ['0.5rem', '0.5625rem'],
+      '2xs': ['0.625rem', '0.75rem'],
       xs: ['0.75rem', '0.875rem'],
       sm: ['0.875rem', '1.0625rem'],
       base: ['1rem', '1.5rem'],
@@ -15,37 +17,37 @@ export default {
       '5xl': ['3.5rem', '4.1875rem'],
     },
     fontFamily: {
-      // head: ['"Exo 2"', 'sans-serif'],
-      body: ['"Roboto Mono"', 'sans-serif'],
+      main: ['Inter', 'sans-serif'],
+      sub: ['Inter', 'sans-serif'],
     },
     fontWeight: {
-      light: 300,
-      regular: 400,
-      'semi-bold': 500,
-      bold: 600,
+      light: '300',
+      regular: '400',
+      'semi-bold': '500',
+      bold: '600',
     },
     colors: {
       transparent: 'transparent',
       white: '#FFFFFF',
       light: {
-        400: '#FEFEFE',
-        500: '#E8E8E8',
-        600: '#9AA5B8',
+        400: '#F8FAFC',
+        500: '#F1F5F9',
+        600: '#CBD5E1',
       },
       black: '#000000',
       dark: {
-        400: '#191919',
-        500: '#2B2B2B',
-        600: '',
+        400: '#171717',
+        500: '#262626',
+        600: '#404040',
       },
       primary: {
         400: '#61BFFF',
-        500: '#3AAFFF',
+        500: '#FF8204',
         600: '#2E8CCC',
       },
       success: {
         400: '',
-        500: '#48FEA7',
+        500: '',
         600: '',
       },
       warning: {
@@ -55,11 +57,9 @@ export default {
       },
       alert: {
         400: '',
-        500: '#F43F5E',
+        500: '',
         600: '',
       },
     },
-    extend: {},
   },
-  plugins: [],
 }

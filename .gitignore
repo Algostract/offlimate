@@ -1,9 +1,9 @@
 # Nuxt dev/build outputs
-.output
+.cache
 .data
 .nuxt
 .nitro
-.cache
+.output
 dist
 
 # Node dependencies
@@ -18,7 +18,10 @@ logs
 .fleet
 .idea
 
-# Local env files
+# Env files
 .env
 .env.*
 !.env.example
+!.env.native
+
+src-tauri
