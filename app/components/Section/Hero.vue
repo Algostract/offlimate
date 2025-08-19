@@ -13,7 +13,7 @@
     </div>
     <div
       class="relative my-4 h-full w-screen grow scale-125 [mask-image:url('/images/ink-stroke.jpg')] [mask-mode:luminance] [mask-position:center] [mask-repeat:no-repeat] [mask-size:130%] md:w-auto">
-      <NuxtImg src="/images/hero-image.jpg" alt="drone" :width="780" :height="520" />
+      <NuxtImg src="/images/hero-image.webp" alt="drone" :width="780" :height="520" />
     </div>
   </section>
 </template>

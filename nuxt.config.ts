@@ -293,7 +293,6 @@ export default defineNuxtConfig({
       navigateFallback: '/',
       cleanupOutdatedCaches: true,
       importScripts: ['/sw-push.js'],
-      maximumFileSizeToCacheInBytes: 3000000,
     },
     client: {
       installPrompt: true,
