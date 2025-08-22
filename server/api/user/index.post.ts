@@ -36,12 +36,20 @@ export default defineEventHandler(async (event) => {
           type: 'select',
           select: { name: changeCase(data.gender, 'sentence') },
         },
-
         Phone: {
           type: 'phone_number',
           phone_number: data.phone,
         },
       },
+    })
+
+    const { user } = await getUserSession(event)
+    await replaceUserSession(event, {
+      user: {
+        ...user,
+        isProfileComplete: true,
+      },
+      logged_at: new Date().toISOString(),
     })
   }
 

@@ -1,11 +1,11 @@
-async function findOrCreateNotionUser(authUser: { sub: string; name: string; picture: string; email: string }): Promise<{
+export async function findOrCreateNotionUser(authUser: { sub?: string; name?: string; picture?: string; email: string }): Promise<{
   id: string
   name: string
-  avatar: string
+  avatar?: string
   email: string
   createdAt: string
   updatedAt: string
-  isCreatedNow: boolean
+  isProfileComplete: boolean
 }> {
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
@@ -28,24 +28,26 @@ async function findOrCreateNotionUser(authUser: { sub: string; name: string; pic
       email: data.properties.Email.email || '',
       createdAt: data.created_time || new Date().toISOString(),
       updatedAt: data.last_edited_time || new Date().toISOString(),
-      isCreatedNow: data.properties.Status.status.name === 'Unfilled',
+      isProfileComplete: data.properties.Status.status.name !== 'Unfilled',
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = await notion.pages.create({
     parent: { database_id: notionDbId.user },
-    cover: {
-      type: 'external',
-      external: {
-        url: authUser.picture,
+    ...(authUser.picture && {
+      cover: {
+        type: 'external',
+        external: { url: authUser.picture },
       },
-    },
+    }),
     properties: {
-      Name: {
-        type: 'title',
-        title: [{ type: 'text', text: { content: authUser.name } }],
-      },
+      ...(authUser.name && {
+        Name: {
+          type: 'title',
+          title: [{ type: 'text', text: { content: authUser.name } }],
+        },
+      }),
       Email: { type: 'email', email: authUser.email },
     },
   })
@@ -57,7 +59,7 @@ async function findOrCreateNotionUser(authUser: { sub: string; name: string; pic
     email: data.properties.Email.email || '',
     createdAt: data.created_time || new Date().toISOString(),
     updatedAt: data.last_edited_time || new Date().toISOString(),
-    isCreatedNow: true,
+    isProfileComplete: false,
   }
 }
 
@@ -74,12 +76,12 @@ export default defineOAuthGoogleEventHandler({
         email: user.email,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        isProfileComplete: user.isProfileComplete,
       },
       logged_at: new Date().toISOString(),
     })
 
-    if (user.isCreatedNow) return sendRedirect(event, '/auth/signup')
-    else return sendRedirect(event, '/event')
+    return sendRedirect(event, user.isProfileComplete ? '/event' : '/auth/signup')
   },
   onError(event, error) {
     console.error('Google OAuth error:', error)

@@ -1,6 +1,7 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 definePageMeta({
   layout: false,
+  middleware: ['auth'],
 })
 
 const { data: events } = await useFetch('/api/event')

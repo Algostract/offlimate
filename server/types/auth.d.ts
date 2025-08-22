@@ -2,10 +2,11 @@ declare module '#auth-utils' {
   interface User {
     id: string
     name: string
-    avatar: string
+    avatar?: string
     email: string
     createdAt: string
     updatedAt: string
+    isProfileComplete: boolean
   }
 
   /*  interface UserSession {

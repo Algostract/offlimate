@@ -1,16 +1,3 @@
-import { z } from 'zod'
-
-/* Schema */
-export const userFormSchema = z.object({
-  name: z.string().min(2, 'Please enter your full name'),
-  dob: z.string().nonempty('Please provide date of birth'),
-  gender: z.enum(['male', 'female', 'other']),
-  phone: z
-    .string()
-    .min(7, 'Enter valid phone number')
-    .regex(/^\+?\d{7,15}$/, 'Invalid phone number'),
-})
-
 /* Server Only */
 export const resourceTypes = ['user', 'event'] as const
 
@@ -96,7 +83,7 @@ export interface NotionUser {
     Status: {
       type: 'status'
       status: {
-        name: 'Unfilled' | 'Filled' | 'Verified' | 'Converted'
+        name: 'Unfilled' | 'Filled' | 'Verified' | 'Active' | 'Inactive'
       }
     }
     Name: {

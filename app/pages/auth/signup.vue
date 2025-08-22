@@ -3,7 +3,10 @@ import type { z } from 'zod'
 
 definePageMeta({
   layout: false,
+  middleware: ['guest'],
 })
+
+type UserFormData = z.infer<typeof userFormSchema>
 
 const { r$ } = useRegleSchema(
   {
@@ -15,8 +18,6 @@ const { r$ } = useRegleSchema(
   userFormSchema
 )
 
-type UserFormData = z.infer<typeof userFormSchema>
-
 function showError(field: keyof UserFormData) {
   return r$[field].$dirty && r$[field].$error
 }
@@ -25,6 +26,7 @@ const { status, execute } = useFetch('/api/user', {
   method: 'POST',
   body: r$.$value,
   immediate: false,
+  watch: false,
 })
 
 async function onSubmit() {

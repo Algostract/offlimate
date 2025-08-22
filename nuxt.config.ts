@@ -1,3 +1,5 @@
+import vue from '@vitejs/plugin-vue'
+
 const host = process.env.TAURI_DEV_HOST || 'localhost'
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000
 
@@ -54,10 +56,32 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@vueuse/nuxt',
     'nuxt-auth-utils',
+    'nuxt-nodemailer',
   ],
   nitro: {
     compressPublicAssets: true,
+    storage: {
+      fs: {
+        driver: 'fs',
+        base: './static',
+      },
+    },
+    rollupConfig: {
+      plugins: [vue()],
+    },
   },
+  /*   vite: {
+      // FIXME: temporary fix for email remove when not needed
+      $server: {
+        build: {
+          rollupOptions: {
+            output: {
+              preserveModules: true,
+            },
+          },
+        },
+      },
+    }, */
   routeRules: {
     '/': { ssr: true },
     '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
@@ -81,6 +105,7 @@ export default defineNuxtConfig({
     },
     private: {
       notionDbId: '',
+      emailMetaData: '',
       vapidKey: '',
       paymentUpiInfo: '',
     },
@@ -301,6 +326,19 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: false,
       type: 'module',
+    },
+  },
+  nodemailer: {
+    from: '',
+    host: '',
+    port: '',
+    secure: true,
+    auth: {
+      user: '',
+      pass: '',
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   },
   ...nativeConfig,

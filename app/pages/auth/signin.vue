@@ -1,30 +1,39 @@
 <script setup lang="ts">
-import { z } from 'zod'
+import type { z } from 'zod'
 
 definePageMeta({
   layout: false,
+  middleware: ['guest'],
 })
 
-const schema = z.object({
-  email: z.email('Please enter a valid email address'),
-})
+type EmailFormSchema = z.infer<typeof emailFormSchema>
 
-const { r$ } = useRegleSchema({ email: '' }, schema)
+const { r$ } = useRegleSchema({ email: '', otp: undefined }, emailFormSchema)
 
-function showError(field: 'email') {
-  return r$[field].$dirty && r$[field].$error
+function showError(field: keyof EmailFormSchema) {
+  return r$[field]?.$dirty && r$[field].$error
 }
 
-function onSignIn() {
+function onOauthSignIn() {
   console.log('Google sign in requested')
 }
 
-async function onContinue() {
-  const { valid, data } = await r$.$validate()
-  if (!valid) return
+const { status, data, error, execute } = useFetch('/auth/email', {
+  method: 'POST',
+  body: r$.$value,
+  immediate: false,
+  watch: false,
+})
 
-  console.log({ data })
-  // router.push({ path: '/verify', query: { email: data.email } })
+const isOTPSent = computed(() => data.value?.isSuccess && !data.value?.navigateTo)
+
+async function onEmailSignIn() {
+  const { valid } = await r$.$validate()
+  if (!valid || status.value === 'pending') return
+
+  await execute()
+
+  if (data.value?.navigateTo) navigateTo(data.value.navigateTo)
 }
 </script>
 
@@ -41,7 +50,7 @@ async function onContinue() {
         external
         class="focus:ring-yellow-300 flex w-full items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-3 text-black shadow-sm transition-shadow hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-1"
         aria-label="Sign in with Google"
-        @click="onSignIn">
+        @click="onOauthSignIn">
         <NuxtIcon name="local:google" class="text-[18px]" />
         <span class="font-medium text-sm">Sign in with Google</span>
       </NuxtLink>
@@ -50,7 +59,7 @@ async function onContinue() {
         <span class="text-xs text-light-600">or</span>
         <span class="h-px flex-1 bg-light-600"></span>
       </div>
-      <form class="flex flex-col gap-4" novalidate @submit.prevent="onContinue">
+      <form class="flex flex-col gap-4" novalidate @submit.prevent="onEmailSignIn">
         <!-- email field -->
         <div class="flex flex-col gap-3">
           <label for="email" class="font-medium text-slate-300 block text-sm">Email</label>
@@ -60,17 +69,31 @@ async function onContinue() {
             type="email"
             autocomplete="email"
             placeholder="you@email.com"
+            :disabled="isOTPSent"
             class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('email')" class="text-xs text-alert-500">{{ r$.email.$errors[0] }}</p>
+        </div>
+        <!-- otp field -->
+        <div v-if="isOTPSent" class="flex flex-col gap-3">
+          <label for="otp" class="font-medium text-slate-300 block text-sm">OTP</label>
+          <input
+            id="otp"
+            v-model="r$.$value.otp"
+            type="password"
+            class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+            :aria-invalid="r$.$invalid ? 'true' : 'false'" />
+          <p v-if="showError('otp') || error" class="text-xs text-alert-500">
+            {{ r$.otp?.$errors?.[0] || error?.message }}
+          </p>
         </div>
         <!-- continue button -->
         <button
           type="submit"
           :disabled="r$.$invalid"
-          class="font-medium w-full rounded-lg py-3 text-base transition-all disabled:cursor-not-allowed disabled:opacity-60"
+          class="font-medium flex w-full items-center justify-center gap-1.5 rounded-lg py-3 text-base transition-all disabled:cursor-not-allowed disabled:opacity-60"
           :class="!r$.$invalid ? 'bg-white text-black' : 'bg-black text-white'">
-          Continue with Email
+          <NuxtIcon v-if="status === 'pending'" name="local:loader" class="text-[24px]" />Continue with Email
         </button>
       </form>
       <!-- subtle footer / link -->

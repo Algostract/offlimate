@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['guest'],
+})
+
 const title = `Offlimate`
 const description = `Offline Meetup Event Booking Platform`
 
