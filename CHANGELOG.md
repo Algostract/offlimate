@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.2
+
+[compare changes](https://github.com/shba007/offlimate/compare/v0.1.1...v0.1.2)
+
+### 🚀 Enhancements
+
+- Email auth added, auth guard added ([0d920af](https://github.com/shba007/offlimate/commit/0d920af))
+
+### ❤️ Contributors
+
+- Shba007 ([@shba007](https://github.com/shba007))
+
 ## v0.1.1
 
 [compare changes](https://github.com/shba007/offlimate/compare/v0.1.0...v0.1.1)
