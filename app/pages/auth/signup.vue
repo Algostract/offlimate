@@ -36,7 +36,7 @@ async function onSubmit() {
   await execute()
 
   if (status.value === 'success') {
-    navigateTo('/event')
+    await navigateTo('/event')
   }
 }
 </script>

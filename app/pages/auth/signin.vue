@@ -25,7 +25,7 @@ const { status, data, error, execute } = useFetch('/auth/email', {
   watch: false,
 })
 
-const isOTPSent = computed(() => data.value?.isSuccess && !data.value?.navigateTo)
+const isOTPSent = computed(() => data.value?.isSuccess)
 
 async function onEmailSignIn() {
   const { valid } = await r$.$validate()
@@ -33,7 +33,7 @@ async function onEmailSignIn() {
 
   await execute()
 
-  if (data.value?.navigateTo) navigateTo(data.value.navigateTo)
+  if (data.value?.navigateTo) window.location.href = data.value.navigateTo
 }
 </script>
 
