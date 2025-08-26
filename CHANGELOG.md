@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.3
+
+[compare changes](https://github.com/shba007/offlimate/compare/v0.1.2...v0.1.3)
+
+### 🩹 Fixes
+
+- Signup flow fixed ([234987f](https://github.com/shba007/offlimate/commit/234987f))
+
+### ❤️ Contributors
+
+- Shba007 ([@shba007](https://github.com/shba007))
+
 ## v0.1.2
 
 [compare changes](https://github.com/shba007/offlimate/compare/v0.1.1...v0.1.2)
