@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.2.0
+
+[compare changes](https://github.com/shba007/offlimate/compare/v0.1.3...v0.2.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Add download and share icons, update event ticketing functionality ([1b67911](https://github.com/shba007/offlimate/commit/1b67911))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Add download and share icons, update event ticketing functionality ([1b67911](https://github.com/shba007/offlimate/commit/1b67911))
+
+### ❤️ Contributors
+
+- Shba007 <shirsendu2001@gmail.com>
+
 ## v0.1.3
 
 [compare changes](https://github.com/shba007/offlimate/compare/v0.1.2...v0.1.3)
