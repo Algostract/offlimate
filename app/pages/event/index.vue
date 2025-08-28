@@ -10,14 +10,13 @@ const { data: events } = await useFetch('/api/event')
 <template>
   <main class="flex min-h-screen w-screen flex-col gap-8 p-5">
     <CardEvent
-      v-for="{ id, datetime, location, price, image, urls } in events"
+      v-for="{ id, datetime, location, image, urls } in events"
+      :id="id"
       :key="id"
       :datetime="datetime"
       :name="location.name"
       :address="location.address"
-      :price="price"
       :image="image"
-      :payment-url="urls.payment"
       :direction-url="urls.direction"
       :call-url="urls.call" />
   </main>

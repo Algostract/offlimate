@@ -2,12 +2,11 @@
 import { parseISO, format, formatDistanceToNow, isBefore, startOfDay } from 'date-fns'
 
 const props = defineProps<{
+  id: number
   name: string
   address: string
   image: string
   datetime: string
-  price: number
-  paymentUrl: string
   directionUrl: string
   callUrl: string
 }>()
@@ -36,8 +35,8 @@ const isActive = computed(() => {
     </div>
     <!-- Card -->
     <div
-      class="relative grid aspect-[5/3] max-w-md grid-cols-[repeat(2,1fr)] grid-rows-[repeat(4,auto)_fit-content] gap-2 rounded-xl border border-dark-600 bg-dark-500 pb-4 pl-4 text-white shadow-md">
-      <NuxtImg :src="image" alt="event" height="384" width="384" class="col-span-1 col-start-2 row-span-4 row-start-1 aspect-square rounded-bl-lg object-cover" />
+      class="relative grid aspect-[5/3] max-w-md grid-cols-[3fr_2fr] grid-rows-[repeat(4,auto)_fit-content] gap-2 overflow-hidden rounded-xl border border-dark-600 bg-dark-500 pb-4 pl-4 text-white shadow-md">
+      <NuxtImg :src="image" alt="event" height="256" width="256" class="col-span-1 col-start-2 row-span-4 row-start-1 aspect-square rounded-bl-lg object-cover" />
       <!-- Left info -->
       <p class="col-start-1 row-start-1 mt-4 text-sm opacity-60">{{ time }}</p>
       <!-- <div class="flex-1 space-y-1"> -->
@@ -46,16 +45,20 @@ const isActive = computed(() => {
         {{ address }}
       </p>
       <!-- </div> -->
-      <p class="font-semibold col-start-1 row-start-4 pt-1 text-base">₹{{ price }}</p>
+      <!-- <p class="font-semibold col-start-1 row-start-4 pt-1 text-base">₹{{ price }}</p> -->
       <!-- Actions -->
-      <div v-show="isActive" class="col-span-full col-start-1 row-start-5 flex gap-2 pt-2">
-        <NuxtLink :to="paymentUrl" external class="font-medium text-gray-900 flex h-fit items-center gap-1 rounded-full bg-white px-2 py-1.5 pr-3 text-sm text-black shadow">
-          <NuxtIcon name="local:ticket" class="text-[16px]" /> Purchase
+      <div v-show="isActive" class="col-span-full col-start-1 row-start-5 flex gap-2">
+        <NuxtLink :to="`/event/${id}`" class="font-medium text-gray-900 flex h-fit items-center justify-center gap-1 rounded-full bg-white fill-black px-2 py-1.5 pr-3 text-sm text-black shadow">
+          <NuxtIcon name="local:ticket" class="text-[16px]" /> Get Ticket
         </NuxtLink>
-        <NuxtLink :to="directionUrl" external target="_blank" class="font-medium text-gray-900 flex h-fit items-center gap-1 rounded-full bg-white px-2 py-1.5 pr-3 text-sm text-black shadow">
+        <NuxtLink
+          :to="directionUrl"
+          external
+          target="_blank"
+          class="font-medium text-gray-900 flex h-fit items-center justify-center gap-1 rounded-full bg-white fill-black px-2 py-1.5 pr-3 text-sm text-black shadow">
           <NuxtIcon name="local:geo" class="text-[16px]" /> Direction
         </NuxtLink>
-        <NuxtLink :to="callUrl" external class="font-medium text-gray-900 flex h-fit items-center gap-1 rounded-full bg-white px-2 py-1.5 pr-3 text-sm text-black shadow">
+        <NuxtLink :to="callUrl" external class="font-medium text-gray-900 flex h-fit items-center justify-center gap-1 rounded-full bg-white fill-black px-2 py-1.5 pr-3 text-sm text-black shadow">
           <NuxtIcon name="local:call-accept" class="text-[16px]" /> Ask
         </NuxtLink>
       </div>
